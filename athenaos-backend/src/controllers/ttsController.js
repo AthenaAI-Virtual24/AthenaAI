@@ -1,12 +1,25 @@
-// src/controllers/ttsController.js
-const textToSpeech = require('@google-cloud/text-to-speech');
-const util = require('util');
+const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 
-const credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-const credentials = JSON.parse(credentialsJson);
-const client = new textToSpeech.TextToSpeechClient({ credentials });
+let textToSpeechClient;
+
+try {
+  if (process.env.GOOGLE_CREDENTIALS_BASE64) {
+    const credentialsJson = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
+    const credentials = JSON.parse(credentialsJson);
+    textToSpeechClient = new TextToSpeechClient({ credentials });
+  } else {
+    textToSpeechClient = new TextToSpeechClient();
+  }
+} catch (error) {
+  console.error('Failed to initialize TextToSpeechClient:', error);
+}
+
 
 exports.synthesizeSpeech = async (req, res) => {
+  if (!textToSpeechClient) {
+    return res.status(500).send('Text-to-Speech client not initialized');
+  }
+
   const { text } = req.body;
 
   if (!text) {
@@ -20,7 +33,7 @@ exports.synthesizeSpeech = async (req, res) => {
       audioConfig: { audioEncoding: 'MP3' },
     };
 
-    const [response] = await client.synthesizeSpeech(request);
+    const [response] = await textToSpeechClient.synthesizeSpeech(request);
     
     res.json({ audioContent: response.audioContent.toString('base64') });
 
