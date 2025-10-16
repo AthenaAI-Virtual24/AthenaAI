@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { AuthResponse } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8888/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8888/api';
 
 console.log(`API Endpoint: ${API_BASE_URL}`);
 
