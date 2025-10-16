@@ -2,9 +2,14 @@
 import axios from 'axios';
 import type { AuthResponse } from '../types';
 
-export const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IS_PROD = import.meta.env.PROD;
+const PROD_URL = 'https://athena-backend-five.vercel.app/api';
+const LOCAL_URL = 'http://localhost:8888/api';
 
-// A function to handle user login
+export const API_URL = IS_PROD ? PROD_URL : LOCAL_URL;
+
+console.log(`API is running in ${IS_PROD ? 'production' : 'development'} mode. Endpoint: ${API_URL}`);
+
 export const loginUser = async (email: string, password: string) => {
   const response = await axios.post<AuthResponse>(`${API_URL}/auth/login`, {
     email,
@@ -13,7 +18,6 @@ export const loginUser = async (email: string, password: string) => {
   return response.data;
 };
 
-// A function to handle user registration
 export const registerUser = async (username: string, password: string, email: string) => {
   const response = await axios.post(`${API_URL}/auth/register`, {
     username,
@@ -48,4 +52,3 @@ export const synthesizeSpeech = async (text: string, token: string): Promise<{ a
   );
   return response.data;
 };
- 
