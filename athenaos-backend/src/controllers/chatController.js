@@ -31,7 +31,7 @@ exports.sendMessage = async (req, res) => {
     console.log(`INFO: sendMessage triggered for user ${userId}. Message: "${text}"`);
 
     const [conversation] = await Conversation.findOrCreate({
-        where: { userId: userId, id: req.body.conversationId || null }, // Use existing or create new
+        where: { userId: userId, id: req.body.conversationId || null },
         defaults: { userId: userId }
     });
     
@@ -107,3 +107,4 @@ exports.getEmotionHistory = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+ 
