@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  'https://athena-aivercel.vercel.app'
+  'https://athena-ai-lilac.vercel.app'
 ];
 
 const corsOptions = {
